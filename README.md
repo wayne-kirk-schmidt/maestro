@@ -6,6 +6,11 @@ Want to be able to orchestrate QA testing at scale, at speed, and with security?
 
 Whether you have a small code base of single files or a massie project with thousands of files, Maestro can help!
 
+Production
+==========
+
+[Maestro Presentation](https://github.com/wayne-kirk-schmidt/maestro/blob/main/docs/maestro_thoughts-on-qa-testing.pdf)
+
 Strategy
 ========
 
