@@ -1,0 +1,41 @@
+---
+- name: Update and upgrade system packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install security tools
+  apt:
+    name:
+      - ufw
+      - fail2ban
+      - unattended-upgrades
+      - auditd
+    state: present
+
+- name: Restrict root SSH access
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: 'PermitRootLogin no'
+  notify: restart ssh
+
+- name: Copy the hardening script
+  copy:
+    src: hardening.sh
+    dest: /tmp/hardening.sh
+    mode: '0700'
+
+- name: Execute the hardening script
+  command: /tmp/hardening.sh
+  register: hardening_output
+  changed_when: hardening_output.rc == 0
+
+- name: Display the output of the hardening script
+  debug:
+    msg: "{{ hardening_output.stdout }}"
+
+- name: Remove the hardening script after execution
+  file:
+    path: /tmp/hardening.sh
+    state: absent
