@@ -27,11 +27,6 @@ We proudly introduce the Maestro engine, which specialized in M.A.S.T.E.R. testi
 
 Maestro is our adaptive machine analytics engine to coordinate all of this.
 
-Shopping List
-=============
-
-We use free and open source software (FOSS) but these components can be supplied by commercial off the shelf (COTS) equivalents.
-
 Goals
 =====
 
@@ -40,8 +35,13 @@ Goals
 - **Security First**: Ensure secure access with SSH certificates and access controls.
 - **Scalable & Maintainable**: Optimize configurations for scalability and long-term use.
 
-Technology Stack
-================
+Shopping List
+=============
+
+We use free and open source software (FOSS) but these components can be supplied by commercial off the shelf (COTS) equivalents.
+
+Component List
+==============
 - **Terraform** – Infrastructure as Code (IaC) for AWS or on-prem provisioning.
 - **Docker & Docker Compose** – Containerized services for Kafka, ELK, CMDB, Ticketing, and Testing.
 - **Ansible** – Configuration management and fine-tuning.
@@ -53,11 +53,27 @@ Technology Stack
 - **Storage (S3/NFS)** – For logs, test artifacts, and output storage.
 - **Secure Access** – SSH and certificates for authentication.
 
+Component Roles and Descriptions
+================================
+
+| Component          | Role                                | Description |
+|-------------------|-----------------------------------|-------------|
+| **Terraform**     | Infrastructure Provisioning       | Manages AWS or on-prem infrastructure as code. |
+| **Docker**       | Containerization                   | Runs services in isolated environments. |
+| **Kafka**        | Messaging Bus                      | Facilitates event-driven communication. |
+| **Elasticsearch** | Search & Analytics Database       | Stores and indexes log data for analysis. |
+| **Logstash**     | Log Processing                     | Aggregates, processes, and ships logs to Elasticsearch. |
+| **Kibana**       | Data Visualization                 | Provides dashboards and visualization for log data. |
+| **i-doit CMDB**  | Configuration Management Database | Stores IT asset configurations and dependencies. |
+| **Zammad**       | Ticketing System                   | Manages IT service requests and incident tracking. |
+| **Robot Framework** | Test Automation                 | Automates testing of deployed services. |
+| **Storage (S3/NFS)** | Data Storage                  | Stores logs, test artifacts, and system backups. |
+| **Secure Access** | Authentication & Security        | Manages SSH access and certificates for secure connectivity. |
+
 Repository Structure
 ====================
 
-The repository follows a structured hierarchy to organize Terraform, Docker, Ansible, and configuration files efficiently. 
-Below is the directory structure and its purpose.
+The following shows how I have the repository structured, to help navigate the project.
 
 ### Directory Structure
 ```plaintext
