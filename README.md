@@ -45,8 +45,12 @@ Shopping List
 
 We use free and open source software (FOSS) but these components can be supplied by commercial off the shelf (COTS) equivalents.
 
-Component List
-==============
+The following list of Components are based on FOSS; you will be able to replace the FOSS with your own components.
+
+Later versions of Maestro will have a setup wizard that permits us to specify the components we want for Maestro to use.
+
+Sample Component List
+=====================
 - **Terraform** – Infrastructure as Code (IaC) for AWS or on-prem provisioning.
 - **Docker & Docker Compose** – Containerized services for Kafka, ELK, CMDB, Ticketing, and Testing.
 - **Ansible** – Configuration management and fine-tuning.
@@ -58,8 +62,8 @@ Component List
 - **Storage (S3/NFS)** – For logs, test artifacts, and output storage.
 - **Secure Access** – SSH and certificates for authentication.
 
-Component Roles and Descriptions
-================================
+Sample Component Roles and Descriptions
+=======================================
 
 | Component          | Role                                | Description |
 |-------------------|-----------------------------------|-------------|
