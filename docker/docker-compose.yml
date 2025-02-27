@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    restart: unless-stopped
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    networks:
+      - secured_network
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - secured_network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.5.3
+    container_name: logstash
+    restart: unless-stopped
+    volumes:
+      - ./config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+    networks:
+      - secured_network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.3
+    container_name: elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - secured_network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.5.3
+    container_name: kibana
+    restart: unless-stopped
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+    depends_on:
+      - elasticsearch
+    networks:
+      - secured_network
+
+  i-doit:
+    image: idoitsystems/idoit-open:latest
+    container_name: idoitsystem
+    restart: unless-stopped
+    networks:
+      - secured_network
+
+  zammad:
+    image: zammad/zammad:latest
+    container_name: zammad
+    restart: unless-stopped
+    environment:
+      - DATABASE_ADAPTER=mysql2
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+      - DATABASE_USER=zammad
+      - DATABASE_PASSWORD=${ZAMMAD_DB_PASSWORD}
+    networks:
+      - secured_network
+    depends_on:
+      - db
+
+  robotframework:
+    image: ppodgorsek/robot-framework:latest
+    container_name: robotframework
+    restart: unless-stopped
+    volumes:
+      - ./tests:/opt/robotframework/tests:ro
+      - ./results:/opt/robotframework/reports
+    networks:
+      - secured_network
+
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: zammad
+      MYSQL_USER: zammad
+      MYSQL_PASSWORD: ${ZAMMAD_DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - secured_network
+
+networks:
+  secured_network:
+    driver: bridge
+
+volumes:
+  es_data:
+  db_data:
